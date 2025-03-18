@@ -1,5 +1,19 @@
 import * as os from "node:os";
 
+function formatDate(date: Date) {
+  const pad = (num: number) => num.toString().padStart(2, "0");
+
+  const mm = pad(date.getMonth() + 1); // Months are 0-based
+  const dd = pad(date.getDate());
+  const yyyy = date.getFullYear();
+
+  const hh = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  const ss = pad(date.getSeconds());
+
+  return `${mm}:${dd}:${yyyy} ${hh}:${min}:${ss}`;
+}
+
 const styles = {
   info: "color: blue; font-weight: bold;",
   warn: "color: orange; font-weight: bold;",
@@ -29,31 +43,31 @@ class ServerLogger {
     message: string,
     date: boolean = false
   ) {
-    const timestamp = new Date().toISOString();
+    const timestamp = formatDate(new Date());
     const formattedMessage = `${ansiColors[level]}${message} ${
       date ? timestamp : ""
     } ${ansiColors.reset}`;
     console.log(formattedMessage);
   }
 
-  static info(message: string) {
-    this.log("info", message);
+  static info(message: string, timestamp?: boolean) {
+    this.log("info", message, timestamp);
   }
 
-  static success(message: string) {
-    this.log("success", message);
+  static success(message: string, timestamp?: boolean) {
+    this.log("success", message, timestamp);
   }
 
-  static warn(message: string) {
-    this.log("warn", message);
+  static warn(message: string, timestamp?: boolean) {
+    this.log("warn", message, timestamp);
   }
 
-  static error(message: string) {
-    this.log("error", message);
+  static error(message: string, timestamp?: boolean) {
+    this.log("error", message, timestamp);
   }
 
-  static debug(message: string) {
-    this.log("debug", message);
+  static debug(message: string, timestamp?: boolean) {
+    this.log("debug", message, timestamp);
   }
 }
 
@@ -61,6 +75,6 @@ export { clientLogger, ServerLogger };
 
 let cpuInfo = os.cpus();
 ServerLogger.success(`Machine Model : ${cpuInfo[0].model}`);
-console.log("Number of Cores :", cpuInfo.length);
-console.log("Total Memory : ", os.totalmem());
-console.log("Free Memory : ", os.freemem());
+ServerLogger.info(`Number of Cores : ${cpuInfo.length}`);
+ServerLogger.error(`Total Memory : ${os.totalmem()}`);
+ServerLogger.debug(`Free Memory : ${os.freemem()}`, true);
