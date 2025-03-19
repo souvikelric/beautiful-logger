@@ -15,10 +15,12 @@ function formatDate(date: Date) {
 }
 
 const styles = {
-  info: "color: blue; font-weight: bold;",
-  warn: "color: orange; font-weight: bold;",
-  error: "color: red; font-weight: bold;",
-  success: "color: green; font-weight: bold;",
+  info: "color: blue; font-weight: bold; background-color: #f1f1f1; margin:2px 4px",
+  warn: "color: orange; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
+  error:
+    "color: red; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
+  success:
+    "color: green; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
 };
 
 const clientLogger = {
