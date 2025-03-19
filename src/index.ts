@@ -1,6 +1,6 @@
 import * as os from "node:os";
 
-function formatDate(date: Date) {
+function formatDate(date: Date, format?: timeFormats) {
   const pad = (num: number) => num.toString().padStart(2, "0");
 
   const mm = pad(date.getMonth() + 1); // Months are 0-based
@@ -10,17 +10,22 @@ function formatDate(date: Date) {
   const hh = pad(date.getHours());
   const min = pad(date.getMinutes());
   const ss = pad(date.getSeconds());
-
-  return `${mm}:${dd}:${yyyy} ${hh}:${min}:${ss}`;
+  let dateString = `${mm}:${dd}:${yyyy} ${hh}:${min}:${ss}`;
+  if (format === "dateOnly") {
+    return dateString.split(" ")[0];
+  } else if (format === "timeOnly") {
+    return dateString.split(" ")[1];
+  }
+  return dateString;
 }
 
 const styles = {
-  info: "color: blue; font-weight: bold; background-color: #f1f1f1; margin:2px 4px",
-  warn: "color: orange; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
+  info: "color: blue; font-weight: bold; background-color: #f1f1f1; padding: 3px",
+  warn: "color:rgb(227, 140, 42); font-weight: bold;  background-color: #f1f1f1; padding: 3px",
   error:
-    "color: red; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
+    "color: red; font-weight: bold;  background-color: #f1f1f1; padding: 3px",
   success:
-    "color: green; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
+    "color: green; font-weight: bold;  background-color: #f1f1f1; padding: 3px",
 };
 
 type timeFormats = "timeOnly" | "dateOnly";
@@ -32,7 +37,10 @@ type options = {
 
 class ClientLogger {
   static log(msg: string, style: keyof typeof styles, options?: options) {
-    const date = formatDate(new Date());
+    let date =
+      options?.timestamp && options?.timeFormat
+        ? formatDate(new Date(), options?.timeFormat)
+        : formatDate(new Date());
     console.log(
       `%c${msg} ${options?.timestamp ? date + " " : ""}`,
       styles[style]
@@ -145,8 +153,8 @@ class ServerLogger {
 
 export { ClientLogger, ServerLogger };
 
-let cpuInfo = os.cpus();
-ServerLogger.success(`Machine Model : ${cpuInfo[0].model}`);
-ServerLogger.infoBg(`Number of Cores : ${cpuInfo.length}`);
-ServerLogger.errorBg(`Total Memory : ${os.totalmem()}`);
-ServerLogger.cyanBg(`Free Memory : ${os.freemem()}`, true);
+// let cpuInfo = os.cpus();
+// ServerLogger.success(`Machine Model : ${cpuInfo[0].model}`);
+// ServerLogger.infoBg(`Number of Cores : ${cpuInfo.length}`);
+// ServerLogger.errorBg(`Total Memory : ${os.totalmem()}`);
+// ServerLogger.cyanBg(`Free Memory : ${os.freemem()}`, true);
