@@ -23,12 +23,31 @@ const styles = {
     "color: green; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
 };
 
-const clientLogger = {
-  log: (msg: string) => console.log(`%c${msg}`, styles.info),
-  warn: (msg: string) => console.warn(`%c${msg}`, styles.warn),
-  error: (msg: string) => console.error(`%c${msg}`, styles.error),
-  success: (msg: string) => console.log(`%c${msg}`, styles.success),
-};
+// const clientLogger = {
+//   log: (msg: string) => console.log(`%c${msg}`, styles.info),
+//   warn: (msg: string) => console.warn(`%c${msg}`, styles.warn),
+//   error: (msg: string) => console.error(`%c${msg}`, styles.error),
+//   success: (msg: string) => console.log(`%c${msg}`, styles.success),
+// };
+
+class ClientLogger {
+  static log(msg: string, style: keyof typeof styles, timestamp?: boolean) {
+    const date = formatDate(new Date());
+    console.log(`%c${msg} ${timestamp ? date + " " : ""}`, styles[style]);
+  }
+  static info(msg: string, timestamp?: boolean) {
+    this.log(msg, "info", timestamp);
+  }
+  static warn(msg: string, timestamp?: boolean) {
+    this.log(msg, "warn", timestamp);
+  }
+  static error(msg: string, timestamp?: boolean) {
+    this.log(msg, "error", timestamp);
+  }
+  static success(msg: string, timestamp?: boolean) {
+    this.log(msg, "success", timestamp);
+  }
+}
 
 const ansiColors = {
   fgWhite: "\x1b[97m", //White
@@ -121,7 +140,7 @@ class ServerLogger {
   }
 }
 
-export { clientLogger, ServerLogger };
+export { ClientLogger, ServerLogger };
 
 let cpuInfo = os.cpus();
 ServerLogger.success(`Machine Model : ${cpuInfo[0].model}`);
