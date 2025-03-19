@@ -23,29 +23,32 @@ const styles = {
     "color: green; font-weight: bold;  background-color: #f1f1f1; margin:2px 4px",
 };
 
-// const clientLogger = {
-//   log: (msg: string) => console.log(`%c${msg}`, styles.info),
-//   warn: (msg: string) => console.warn(`%c${msg}`, styles.warn),
-//   error: (msg: string) => console.error(`%c${msg}`, styles.error),
-//   success: (msg: string) => console.log(`%c${msg}`, styles.success),
-// };
+type timeFormats = "timeOnly" | "dateOnly";
+
+type options = {
+  timestamp?: boolean;
+  timeFormat?: timeFormats;
+};
 
 class ClientLogger {
-  static log(msg: string, style: keyof typeof styles, timestamp?: boolean) {
+  static log(msg: string, style: keyof typeof styles, options?: options) {
     const date = formatDate(new Date());
-    console.log(`%c${msg} ${timestamp ? date + " " : ""}`, styles[style]);
+    console.log(
+      `%c${msg} ${options?.timestamp ? date + " " : ""}`,
+      styles[style]
+    );
   }
-  static info(msg: string, timestamp?: boolean) {
-    this.log(msg, "info", timestamp);
+  static info(msg: string, options?: options) {
+    this.log(msg, "info", options);
   }
-  static warn(msg: string, timestamp?: boolean) {
-    this.log(msg, "warn", timestamp);
+  static warn(msg: string, options?: options) {
+    this.log(msg, "warn", options);
   }
-  static error(msg: string, timestamp?: boolean) {
-    this.log(msg, "error", timestamp);
+  static error(msg: string, options?: options) {
+    this.log(msg, "error", options);
   }
-  static success(msg: string, timestamp?: boolean) {
-    this.log(msg, "success", timestamp);
+  static success(msg: string, options?: options) {
+    this.log(msg, "success", options);
   }
 }
 
