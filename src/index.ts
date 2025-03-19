@@ -31,7 +31,7 @@ const clientLogger = {
 };
 
 const ansiColors = {
-  fgWhite: "\x1b[37m", //White
+  fgWhite: "\x1b[97m", //White
   reset: "\x1b[0m",
   info: "\x1b[34m", // Blue
   success: "\x1b[32m", // Green
@@ -70,9 +70,9 @@ class ServerLogger {
     date: boolean = false
   ) {
     const timestamp = formatDate(new Date());
-    const formattedMessage = `${bgColors[level]}${
-      ansiColors.fgWhite
-    }${message} ${date ? timestamp : ""}${ansiColors.reset} `;
+    const formattedMessage = `\x1b[97m${bgColors[level]} ${message} ${
+      date ? timestamp + " " : ""
+    }${ansiColors.reset} `;
     console.log(formattedMessage);
   }
 
