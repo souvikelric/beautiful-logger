@@ -1,5 +1,3 @@
-import * as os from "node:os";
-
 function formatDate(date: Date, format?: timeFormats) {
   const pad = (num: number) => num.toString().padStart(2, "0");
 
@@ -20,12 +18,21 @@ function formatDate(date: Date, format?: timeFormats) {
 }
 
 const styles = {
-  info: "color: blue; font-weight: bold; background-color: #f1f1f1; padding: 3px",
-  warn: "color:rgb(227, 140, 42); font-weight: bold;  background-color: #f1f1f1; padding: 3px",
+  info: "color: rgb(81, 90, 230);; font-weight: bold; background-color: #f1f1f1; padding: 3px",
+  warn: "color:rgb(198, 112, 20); font-weight: bold;  background-color: #f1f1f1; padding: 3px",
   error:
-    "color: red; font-weight: bold;  background-color: #f1f1f1; padding: 3px",
+    "color: rgb(240, 57, 88); font-weight: bold;  background-color: #f1f1f1; padding: 3px",
   success:
-    "color: green; font-weight: bold;  background-color: #f1f1f1; padding: 3px",
+    "color: rgb(9, 152, 98); font-weight: bold;  background-color: #f1f1f1; padding: 3px",
+};
+
+const invertedStyles = {
+  info: "color: white; font-weight: bold; background-color:rgb(81, 90, 230); padding: 3px",
+  warn: "color:white; font-weight: bold;  background-color: rgb(227, 140, 42);; padding: 3px",
+  error:
+    "color: white; font-weight: bold;  background-color:rgb(240, 57, 88); padding: 3px",
+  success:
+    "color: white; font-weight: bold;  background-color:rgb(9, 152, 98); padding: 3px",
 };
 
 type timeFormats = "timeOnly" | "dateOnly";
@@ -33,6 +40,8 @@ type timeFormats = "timeOnly" | "dateOnly";
 type options = {
   timestamp?: boolean;
   timeFormat?: timeFormats;
+  inverted?: boolean;
+  clear?: boolean;
 };
 
 class ClientLogger {
@@ -41,10 +50,20 @@ class ClientLogger {
       options?.timestamp && options?.timeFormat
         ? formatDate(new Date(), options?.timeFormat)
         : formatDate(new Date());
-    console.log(
-      `%c${msg} ${options?.timestamp ? date + " " : ""}`,
-      styles[style]
-    );
+    if (options?.clear) {
+      console.clear();
+    }
+    if (options?.inverted) {
+      console.log(
+        `%c${msg}${options?.timestamp ? " " + date : ""}`,
+        invertedStyles[style]
+      );
+    } else {
+      console.log(
+        `%c${msg}${options?.timestamp ? " " + date : ""}`,
+        styles[style]
+      );
+    }
   }
   static info(msg: string, options?: options) {
     this.log(msg, "info", options);
