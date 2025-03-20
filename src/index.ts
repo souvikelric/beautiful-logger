@@ -45,7 +45,8 @@ type options = {
 };
 
 class ClientLogger {
-  static log<T>(msg: T, style: keyof typeof styles, options?: options) {
+  // the base static function that all the other reference
+  static log<T>(msg: T, style: keyof typeof styles, options: options = {}) {
     let date =
       options?.timestamp && options?.timeFormat
         ? formatDate(new Date(), options?.timeFormat)
@@ -65,16 +66,56 @@ class ClientLogger {
       );
     }
   }
-  static info<T>(msg: T, options?: options) {
+
+  // For info
+  static info<T>(
+    msg: T,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+    }
+  ) {
     this.log(msg, "info", options);
   }
-  static warn<T>(msg: T, options?: options) {
+
+  // For warn
+  static warn<T>(
+    msg: T,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+    }
+  ) {
     this.log(msg, "warn", options);
   }
-  static error<T>(msg: T | number, options?: options) {
+
+  //For error
+  static error<T>(
+    msg: T | number,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+    }
+  ) {
     this.log(msg, "error", options);
   }
-  static success<T>(msg: T, options?: options) {
+
+  //For success
+  static success<T>(
+    msg: T,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+    }
+  ) {
     this.log(msg, "success", options);
   }
 }
