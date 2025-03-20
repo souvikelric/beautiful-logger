@@ -47,6 +47,10 @@ type options = {
 class ClientLogger {
   // the base static function that all the other reference
   static log<T>(msg: T, style: keyof typeof styles, options: options = {}) {
+    //checking msg is an object,if it is use JSON.stringify and convert it
+    let formattedMsg =
+      typeof msg === "object" ? JSON.stringify(msg, null, 2) : msg;
+
     let date =
       options?.timestamp && options?.timeFormat
         ? formatDate(new Date(), options?.timeFormat)
@@ -55,13 +59,45 @@ class ClientLogger {
       console.clear();
     }
     if (options?.inverted) {
+      if (Array.isArray(msg)) {
+        console.log(
+          `%c${"Array Output"}${options?.timestamp ? " " + date : ""}`,
+          invertedStyles[style]
+        );
+        console.table(msg);
+        return;
+      } else if (typeof msg === "object") {
+        console.log(
+          `%c${"Object Output"}${options?.timestamp ? " " + date : ""}`,
+          invertedStyles[style]
+        );
+        console.table(msg);
+        return;
+      }
+
       console.log(
-        `%c${msg}${options?.timestamp ? " " + date : ""}`,
+        `%c${formattedMsg}${options?.timestamp ? " " + date : ""}`,
         invertedStyles[style]
       );
     } else {
+      if (Array.isArray(msg)) {
+        console.log(
+          `%c${"Array Output"}${options?.timestamp ? " " + date : ""}`,
+          invertedStyles[style]
+        );
+        console.table(msg);
+        return;
+      } else if (typeof msg === "object") {
+        console.log(
+          `%c${"Object Output"}${options?.timestamp ? " " + date : ""}`,
+          invertedStyles[style]
+        );
+        console.table(msg);
+        return;
+      }
+
       console.log(
-        `%c${msg}${options?.timestamp ? " " + date : ""}`,
+        `%c${formattedMsg}${options?.timestamp ? " " + date : ""}`,
         styles[style]
       );
     }
