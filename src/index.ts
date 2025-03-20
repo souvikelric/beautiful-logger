@@ -45,7 +45,7 @@ type options = {
 };
 
 class ClientLogger {
-  static log(msg: string, style: keyof typeof styles, options?: options) {
+  static log<T>(msg: T, style: keyof typeof styles, options?: options) {
     let date =
       options?.timestamp && options?.timeFormat
         ? formatDate(new Date(), options?.timeFormat)
@@ -65,16 +65,16 @@ class ClientLogger {
       );
     }
   }
-  static info(msg: string, options?: options) {
+  static info<T>(msg: T, options?: options) {
     this.log(msg, "info", options);
   }
-  static warn(msg: string, options?: options) {
+  static warn<T>(msg: T, options?: options) {
     this.log(msg, "warn", options);
   }
-  static error(msg: string, options?: options) {
+  static error<T>(msg: T | number, options?: options) {
     this.log(msg, "error", options);
   }
-  static success(msg: string, options?: options) {
+  static success<T>(msg: T, options?: options) {
     this.log(msg, "success", options);
   }
 }
