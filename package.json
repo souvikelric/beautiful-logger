@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "remove-logs": "./dist/removeLogs.js"
+    "logs": "./dist/logs.js"
   },
   "scripts": {
     "dev": "node dist/index.js",

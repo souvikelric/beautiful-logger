@@ -55,6 +55,13 @@ function cleanFile(filePath: string) {
 
 const currentDirectory = process.cwd();
 const tsfiles = getFiles(currentDirectory);
-tsfiles.forEach((ts) => countLogs(ts));
-
-ServerLogger.success(`Found ${logs} logs`);
+const args = process.argv.slice(2);
+if (args.length === 0) {
+  ServerLogger.error("Provide an argument like --count or --remove");
+  process.exit();
+} else if (args[0] === "--count") {
+  tsfiles.forEach((ts) => countLogs(ts));
+  ServerLogger.success(`Found ${logs} logs`);
+} else if (args[0] === "--remove") {
+  tsfiles.forEach((ts) => cleanFile(ts));
+}
