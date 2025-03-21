@@ -190,9 +190,9 @@ const bgColors = {
 };
 
 class ServerLogger {
-  static log(
+  static log<T>(
     level: keyof typeof ansiColors,
-    message: string,
+    message: T,
     date: boolean = false
   ) {
     const timestamp = formatDate(new Date());
@@ -202,9 +202,9 @@ class ServerLogger {
     console.log(formattedMessage);
   }
 
-  static logWithBg(
+  static logWithBg<T>(
     level: keyof typeof bgColors,
-    message: string,
+    message: T,
     date: boolean = false
   ) {
     const timestamp = formatDate(new Date());
@@ -214,47 +214,47 @@ class ServerLogger {
     console.log(formattedMessage);
   }
 
-  static info(message: string, timestamp?: boolean) {
+  static info<T>(message: T, timestamp?: boolean) {
     this.log("info", message, timestamp);
   }
 
-  static infoBg(message: string, timestamp?: boolean) {
+  static infoBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("info", message, timestamp);
   }
 
-  static success(message: string, timestamp?: boolean) {
+  static success<T>(message: T, timestamp?: boolean) {
     this.log("success", message, timestamp);
   }
 
-  static successBg(message: string, timestamp?: boolean) {
+  static successBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("success", message, timestamp);
   }
 
-  static warn(message: string, timestamp?: boolean) {
+  static warn<T>(message: T, timestamp?: boolean) {
     this.log("warn", message, timestamp);
   }
 
-  static warnBg(message: string, timestamp?: boolean) {
+  static warnBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("warn", message, timestamp);
   }
 
-  static error(message: string, timestamp?: boolean) {
+  static error<T>(message: T, timestamp?: boolean) {
     this.log("error", message, timestamp);
   }
 
-  static errorBg(message: string, timestamp?: boolean) {
+  static errorBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("error", message, timestamp);
   }
 
-  static debug(message: string, timestamp?: boolean) {
+  static debug<T>(message: T, timestamp?: boolean) {
     this.log("debug", message, timestamp);
   }
 
-  static debugBg(message: string, timestamp?: boolean) {
+  static debugBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("debug", message, timestamp);
   }
 
-  static cyanBg(message: string, timestamp?: boolean) {
+  static cyanBg<T>(message: T, timestamp?: boolean) {
     this.logWithBg("cyan", message, timestamp);
   }
 }

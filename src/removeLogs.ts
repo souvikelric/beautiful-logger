@@ -2,6 +2,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { ServerLogger } from "./index.js";
 
 function getFiles(currdir: string, fileList: string[] = []): string[] {
   const files = fs.readdirSync(currdir);
@@ -39,4 +40,4 @@ const currentDirectory = process.cwd();
 const tsfiles = getFiles(currentDirectory);
 tsfiles.forEach((ts) => countLogs(ts));
 
-console.log(logs);
+ServerLogger.success(`Found ${logs} logs`);
