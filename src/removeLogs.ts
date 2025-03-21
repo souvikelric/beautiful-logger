@@ -36,6 +36,23 @@ function countLogs(file: string) {
     });
 }
 
+// Remove `console.log(...)` and `ClientLogger.` lines
+function cleanFile(filePath: string) {
+  const content = fs.readFileSync(filePath, "utf-8");
+
+  const cleanedContent = content
+    .split("\n") // Split by lines
+    .filter(
+      (line) => !/console\.log\(/.test(line) && !/ClientLogger\./.test(line)
+    ) // Remove unwanted lines
+    .join("\n"); // Rejoin as a string
+
+  if (content !== cleanedContent) {
+    fs.writeFileSync(filePath, cleanedContent, "utf-8");
+    console.log(`✅ Cleaned: ${filePath}`);
+  }
+}
+
 const currentDirectory = process.cwd();
 const tsfiles = getFiles(currentDirectory);
 tsfiles.forEach((ts) => countLogs(ts));
