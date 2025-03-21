@@ -3,8 +3,23 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-const currentDirectory = process.cwd();
-const rootProjectDirectory = process.argv.slice(0, 2);
+function getFiles(currdir: string, fileList: string[] = []): string[] {
+  const files = fs.readdirSync(currdir);
 
-console.log(currentDirectory);
-console.log(rootProjectDirectory);
+  files.forEach((file) => {
+    if (!(file === ".git" || file === "node_modules")) {
+      const filePath = path.join(currdir, file);
+      if (fs.statSync(filePath).isDirectory()) {
+        getFiles(filePath, fileList);
+      } else {
+        if (file.endsWith(".tsx") || file.endsWith(".jsx")) {
+          fileList.push(filePath);
+        }
+      }
+    }
+  });
+  return fileList;
+}
+
+const currentDirectory = process.cwd();
+console.log(getFiles(currentDirectory));
