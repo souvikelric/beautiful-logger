@@ -13,7 +13,16 @@ function formatDate(date: Date, format?: timeFormats) {
     return dateString.split(" ")[0];
   } else if (format === "timeOnly") {
     return dateString.split(" ")[1];
+  } else if (format === "12h") {
+    let hours = date.getHours();
+    if (hours > 12) {
+      hours = hours % 12;
+      return `${hours}:${min}:${ss} PM`;
+    } else {
+      return `${hours}:${min}:${ss} AM`;
+    }
   }
+
   return dateString;
 }
 
@@ -35,9 +44,10 @@ const invertedStyles = {
     "color: white; font-weight: bold;  background-color:rgb(9, 152, 98); padding: 3px",
 };
 
-type timeFormats = "timeOnly" | "dateOnly";
+type timeFormats = "timeOnly" | "dateOnly" | "12h";
 
 type options = {
+  label?: string;
   timestamp?: boolean;
   timeFormat?: timeFormats;
   inverted?: boolean;
@@ -48,6 +58,8 @@ class ClientLogger {
   // the base static function that all the other reference
   static log<T>(msg: T, style: keyof typeof styles, options: options = {}) {
     //checking msg is an object,if it is use JSON.stringify and convert it
+
+    let label = options?.label ?? "";
     let formattedMsg =
       typeof msg === "object" ? JSON.stringify(msg, null, 2) : msg;
 
@@ -61,14 +73,14 @@ class ClientLogger {
     if (options?.inverted) {
       if (Array.isArray(msg)) {
         console.log(
-          `%c${"Array Output"}${options?.timestamp ? " " + date : ""}`,
+          `%c${label + "Array"}${options?.timestamp ? " " + date : ""}`,
           invertedStyles[style]
         );
         console.table(msg);
         return;
       } else if (typeof msg === "object") {
         console.log(
-          `%c${"Object Output"}${options?.timestamp ? " " + date : ""}`,
+          `%c${label + "Object"}${options?.timestamp ? " " + date : ""}`,
           invertedStyles[style]
         );
         console.table(msg);
@@ -76,20 +88,20 @@ class ClientLogger {
       }
 
       console.log(
-        `%c${formattedMsg}${options?.timestamp ? " " + date : ""}`,
+        `%c${label}${formattedMsg}${options?.timestamp ? " " + date : ""}`,
         invertedStyles[style]
       );
     } else {
       if (Array.isArray(msg)) {
         console.log(
-          `%c${"Array Output"}${options?.timestamp ? " " + date : ""}`,
+          `%c${label + "Array"}${options?.timestamp ? " " + date : ""}`,
           invertedStyles[style]
         );
         console.table(msg);
         return;
       } else if (typeof msg === "object") {
         console.log(
-          `%c${"Object Output"}${options?.timestamp ? " " + date : ""}`,
+          `%c${label + "Object"}${options?.timestamp ? " " + date : ""}`,
           invertedStyles[style]
         );
         console.table(msg);
@@ -97,7 +109,7 @@ class ClientLogger {
       }
 
       console.log(
-        `%c${formattedMsg}${options?.timestamp ? " " + date : ""}`,
+        `%c${label}${formattedMsg}${options?.timestamp ? " " + date : ""}`,
         styles[style]
       );
     }
@@ -248,9 +260,3 @@ class ServerLogger {
 }
 
 export { ClientLogger, ServerLogger };
-
-// let cpuInfo = os.cpus();
-// ServerLogger.success(`Machine Model : ${cpuInfo[0].model}`);
-// ServerLogger.infoBg(`Number of Cores : ${cpuInfo.length}`);
-// ServerLogger.errorBg(`Total Memory : ${os.totalmem()}`);
-// ServerLogger.cyanBg(`Free Memory : ${os.freemem()}`, true);
