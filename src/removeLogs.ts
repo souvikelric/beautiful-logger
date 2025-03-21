@@ -21,5 +21,22 @@ function getFiles(currdir: string, fileList: string[] = []): string[] {
   return fileList;
 }
 
+let logs = 0;
+
+function countLogs(file: string) {
+  const content = fs.readFileSync(file);
+  content
+    .toString()
+    .split("\n")
+    .forEach((f) => {
+      if (f.includes("console.log") || f.includes("ClientLogger.")) {
+        logs++;
+      }
+    });
+}
+
 const currentDirectory = process.cwd();
-console.log(getFiles(currentDirectory));
+const tsfiles = getFiles(currentDirectory);
+tsfiles.forEach((ts) => countLogs(ts));
+
+console.log(logs);
