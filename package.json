@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "type": "module",
+  "bin": {
+    "remove-logs": "./dist/removeLogs.js"
+  },
   "scripts": {
     "dev": "node dist/index.js",
     "watch": "tsc --watch"
