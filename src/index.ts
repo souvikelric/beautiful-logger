@@ -44,6 +44,12 @@ const invertedStyles = {
     "color: white; font-weight: bold;  background-color:rgb(9, 152, 98); padding: 3px",
 };
 
+const rgbText = (r: number, g: number, b: number) =>
+  `color:rgb(${r}, ${g}, ${b}); font-weight: bold;  background-color:#f1f1f1; padding: 3px`;
+
+const rgbInverted = (r: number, g: number, b: number) =>
+  `color: white; font-weight: bold;  background-color:rgb(${r}, ${g}, ${b}); padding: 3px`;
+
 type timeFormats = "timeOnly" | "dateOnly" | "12h";
 
 type options = {
@@ -52,17 +58,31 @@ type options = {
   timeFormat?: timeFormats;
   inverted?: boolean;
   clear?: boolean;
+  r?: number;
+  g?: number;
+  b?: number;
 };
 
 class ClientLogger {
   // the base static function that all the other reference
-  static log<T>(msg: T, style: keyof typeof styles, options: options = {}) {
+  static log<T>(
+    msg: T,
+    style: keyof typeof styles | "rgb" | "rgbInverted",
+    options: options = {}
+  ) {
     //checking msg is an object,if it is use JSON.stringify and convert it
 
     let label = options?.label ?? "";
     let formattedMsg =
       typeof msg === "object" ? JSON.stringify(msg, null, 2) : msg;
-
+    let r = 0,
+      g = 0,
+      b = 0;
+    if (style === "rgb" || "rgbInverted") {
+      if (options.r) r = options.r || 255;
+      if (options.g) g = options.g || 255;
+      if (options.b) b = options.b || 255;
+    }
     let date =
       options?.timestamp && options?.timeFormat
         ? formatDate(new Date(), options?.timeFormat)
@@ -74,14 +94,22 @@ class ClientLogger {
       if (Array.isArray(msg)) {
         console.log(
           `%c${label + "Array"}${options?.timestamp ? " " + date : ""}`,
-          invertedStyles[style]
+          style === "rgb"
+            ? rgbText(r, g, b)
+            : style === "rgbInverted"
+            ? rgbInverted(r, g, b)
+            : invertedStyles[style]
         );
         console.table(msg);
         return;
       } else if (typeof msg === "object") {
         console.log(
           `%c${label + "Object"}${options?.timestamp ? " " + date : ""}`,
-          invertedStyles[style]
+          style === "rgb"
+            ? rgbText(r, g, b)
+            : style === "rgbInverted"
+            ? rgbInverted(r, g, b)
+            : invertedStyles[style]
         );
         console.table(msg);
         return;
@@ -89,20 +117,32 @@ class ClientLogger {
 
       console.log(
         `%c${label}${formattedMsg}${options?.timestamp ? " " + date : ""}`,
-        invertedStyles[style]
+        style === "rgb"
+          ? rgbText(r, g, b)
+          : style === "rgbInverted"
+          ? rgbInverted(r, g, b)
+          : invertedStyles[style]
       );
     } else {
       if (Array.isArray(msg)) {
         console.log(
           `%c${label + "Array"}${options?.timestamp ? " " + date : ""}`,
-          invertedStyles[style]
+          style === "rgb"
+            ? rgbText(r, g, b)
+            : style === "rgbInverted"
+            ? rgbInverted(r, g, b)
+            : invertedStyles[style]
         );
         console.table(msg);
         return;
       } else if (typeof msg === "object") {
         console.log(
           `%c${label + "Object"}${options?.timestamp ? " " + date : ""}`,
-          invertedStyles[style]
+          style === "rgb"
+            ? rgbText(r, g, b)
+            : style === "rgbInverted"
+            ? rgbInverted(r, g, b)
+            : invertedStyles[style]
         );
         console.table(msg);
         return;
@@ -110,7 +150,11 @@ class ClientLogger {
 
       console.log(
         `%c${label}${formattedMsg}${options?.timestamp ? " " + date : ""}`,
-        styles[style]
+        style === "rgb"
+          ? rgbText(r, g, b)
+          : style === "rgbInverted"
+          ? rgbInverted(r, g, b)
+          : invertedStyles[style]
       );
     }
   }
@@ -165,6 +209,36 @@ class ClientLogger {
     }
   ) {
     this.log(msg, "success", options);
+  }
+
+  static rgb<T>(
+    msg: T,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+      r?: number;
+      g?: number;
+      b?: number;
+    }
+  ) {
+    this.log(msg, "rgb", options);
+  }
+
+  static rgbInverted<T>(
+    msg: T,
+    options?: {
+      timestamp?: boolean;
+      timeFormat?: timeFormats;
+      inverted?: boolean;
+      clear?: boolean;
+      r?: number;
+      g?: number;
+      b?: number;
+    }
+  ) {
+    this.log(msg, "rgbInverted", options);
   }
 }
 
