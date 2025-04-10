@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "bin": {
-    "logs": "./dist/logs.js"
+    "log-cleaner": "./dist/logs.js"
   },
   "scripts": {
     "dev": "node dist/index.js",
