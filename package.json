@@ -6,14 +6,25 @@
   "bin": {
     "logs": "./dist/logs.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "dev": "node dist/index.js",
     "watch": "tsc --watch"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "logger",
+    "console",
+    "terminal",
+    "colors",
+    "logs"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "A beautiful CLI logger with colors and log counting and deleteion .",
   "devDependencies": {
     "@types/node": "^22.13.10",
     "typescript": "^5.8.2"
