@@ -74,6 +74,33 @@ function commentLogs(file: string) {
   }
 }
 
+type ConsoleType = "log" | "warn" | "error";
+
+function showLogs({ only = [], exclude = [] } = {}) {
+  const original = {
+    log: console.log,
+    warn: console.warn,
+    error: console.error,
+  };
+
+  const shouldShow = (type: string, args: string[]) => {
+    const str = args.map(String).join(" ");
+    if (only.length && !only.some((term) => str.includes(term))) return false;
+    if (exclude.length && exclude.some((term) => str.includes(term)))
+      return false;
+
+    return true;
+  };
+
+  (["log", "warn", "error"] as ConsoleType[]).forEach((type: ConsoleType) => {
+    console[type] = (...args: string[]) => {
+      if (shouldShow(type, args)) {
+        original[type](...args);
+      }
+    };
+  });
+}
+
 // Remove `console.log(...)` and `ClientLogger.` lines
 function cleanFile(filePath: string) {
   const content = fs.readFileSync(filePath, "utf-8");
